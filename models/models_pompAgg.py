@@ -4,9 +4,6 @@ import math
 def pomp_transition(var, rate, dt=1, num_ensembles=200):
     kb = np.maximum(1.0 - np.exp(-rate*dt), 0)
     num_ind   = np.random.binomial(list(var), kb )
-#     print(num_ind.shape)
-    if num_ind.shape[-1]!=num_ensembles:
-        print("Error transitioning stochastic model")
     return np.squeeze(num_ind)
 
 def model(x, beta, ihr, hfr, alpha, N, num_ensembles=200):
@@ -32,7 +29,7 @@ def model(x, beta, ihr, hfr, alpha, N, num_ensembles=200):
     s2e      =  pomp_transition(S,  foi, num_ensembles=num_ensembles)                 # susceptible to exposed
     e2iu     =  pomp_transition(E,  (1-alpha)*kappa, num_ensembles=num_ensembles)     # exposed to infected underreported
     e2ir     =  pomp_transition(E,  alpha*(1-ihr)*kappa, num_ensembles=num_ensembles) # exposed to infected reported who are not going to die
-    e2ih     =  pomp_transition(E,  ihr*kappa, num_ensembles=num_ensembles)           # exposed to infected hospitalized
+    e2ih     =  pomp_transition(E,  alpha*ihr*kappa, num_ensembles=num_ensembles)           # exposed to infected hospitalized
     iu2r     =  pomp_transition(Iu, gamma, num_ensembles=num_ensembles)              # infected under-reported to recovered
     ir2r     =  pomp_transition(Ir, gamma, num_ensembles=num_ensembles)              # infected reported to recovered
     ih2r     =  pomp_transition(Ih, (1-hfr)*1/10, num_ensembles=num_ensembles)            # infected hospitalized (who are not going to die) to recovered
