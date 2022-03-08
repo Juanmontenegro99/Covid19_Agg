@@ -44,7 +44,7 @@ def model(x, beta, ifr, alpha, N, num_ensembles=200):
     R  = R + ir2r + iu2r - r2s         # Recovered
     C  = e2ir + e2id                   # Incident Cases
     D  = id2death                      # Incident Deaths
-    print(- s2e + r2s + s2e - e2ir - e2iu - e2id + e2ir - ir2r + e2iu - iu2r + e2id + ir2r + iu2r - r2s)
+#     print(- s2e + r2s + s2e - e2ir - e2iu - e2id + e2ir - ir2r + e2iu - iu2r + e2id + ir2r + iu2r - r2s)
 
     return np.array([S, E, Ir, Iu, Id, R, C, D])
 
