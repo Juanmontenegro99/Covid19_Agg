@@ -6,12 +6,17 @@ def pomp_transition(var, rate, dt=1, num_ensembles=200):
     num_ind   = np.random.binomial(list(var), kb )
     return np.squeeze(num_ind)
 
+def determinist_transition(var, rate, num_ensembles=200):
+#     print(var*rate)
+    return np.squeeze(var*rate)
+    
+
 def model(x, beta, ifr, alpha, N, num_ensembles=200):
 
     kappa   = 1/6.4 # Incubation Period [days]
     gamma   = 1/4   # Recovery Period   [days]
     sigma   = 0.5   # Relative Unreported tranmissibility [Adimensional]
-    delta   = 1/365 # Reinfection period [days]
+    delta   = 1/182 # Reinfection period [days]
     gamma_d = 1/12  # Death Period [days]
 
     S   = x[0,:]   # Susceptibles
@@ -22,6 +27,8 @@ def model(x, beta, ifr, alpha, N, num_ensembles=200):
     R   = x[5,:]   # Recovered
     C   = x[6,:]   # Incident Cases
     D   = x[7,:]   # Incident Deaths
+    
+#     print(beta)
 
     foi =  beta * (Ir + sigma*Iu) / N
 
@@ -150,19 +157,19 @@ def init_modelV(pop, num_ensembles=300, num_variables=8, num_age_groups=16):
     x_init = np.zeros((num_variables, num_ensembles))
     for idx_ens in range(num_ensembles):
         S0   = pop
-        E0   = 102334#85763
-        Ir0  = 21293#17036
-        Iu0  = 63565#51214
-        Id0  = 2621#2100
-        R0   = 1.634106e+07#1.761464e+07#2092063 
+        E0   = 804762#102334#85763
+        Ir0  = 179121#21293#17036
+        Iu0  = 517915#63565#51214
+        Id0  = 21178#2621#2100
+        R0   = 3.126159e+07#1.761464e+07#2092063 
         SV0   = 0
         EV0   = 0
         IVr0  = 0
         IVu0  = 0
-        S0   = 7.314175e+06#S0-E0-Ir0-Iu0-SV0-EV0-IVr0-IVu0-Id0-R0
+        S0   = S0-E0-Ir0-Iu0-SV0-EV0-IVr0-IVu0-Id0-R0#7.314175e+06#S0-E0-Ir0-Iu0-SV0-EV0-IVr0-IVu0-Id0-R0
         
         C0   = Ir0
-        D0   = 218#175
+        D0   = 1764#218#175
         
         IVd0  = 0
         RV0   = 0
