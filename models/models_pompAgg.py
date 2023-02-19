@@ -110,7 +110,7 @@ def modelV(x, beta, ifr, iVfr, Vr, alpha, N, num_ensembles=200):
     gamma   = 1/4   # Recovery Period [days]
     gamma_d = 1/12  # Death Period [days]
     sigma   = 0.5   # Relative Unreported tranmissibility [Adimensional]
-    VEI = (0.762)   # One doses vaccine efficacy in reducing infectivity [Adimensional]
+    VEI = (0.762)   # Vaccine efficacy in reducing infectivity [Adimensional]
     
     delta = 1/182
 
@@ -138,7 +138,6 @@ def modelV(x, beta, ifr, iVfr, Vr, alpha, N, num_ensembles=200):
     foi = beta * (((Ir + sigma*Iu)+((1-VEI)*(IVr + sigma*IVu)))/ N)   
     
     ###### TRANSIIONS ######
-#     print(S/(S+E+R))
     s2e      = pomp_transition(S, foi, num_ensembles=num_ensembles)                 # susceptible to exposed
     s2sV     = pomp_transition(Vr, 0, kb = np.nan_to_num(S/(S+E+R)), num_ensembles=num_ensembles)
     e2eV     = pomp_transition(Vr, 0, kb = np.nan_to_num(E/(S+E+R)), num_ensembles=num_ensembles)
@@ -152,9 +151,9 @@ def modelV(x, beta, ifr, iVfr, Vr, alpha, N, num_ensembles=200):
     r2s      = pomp_transition(R, delta, num_ensembles=num_ensembles)
     
     sV2eV      = pomp_transition(SV, foi, num_ensembles=num_ensembles)                  # susceptible to exposed
-    eV2iVu     = pomp_transition(EV, (1-(alpha*0.467))*kappa, num_ensembles=num_ensembles)      # exposed to infected underreported
-    eV2iVr     = pomp_transition(EV, alpha*0.467*(1-iVfr)*kappa, num_ensembles=num_ensembles) # exposed to infected reported who are not going to die
-    eV2iVd     = pomp_transition(EV, alpha*0.467*iVfr*kappa, num_ensembles=num_ensembles)           # exposed to infected reported who are going to die
+    eV2iVu     = pomp_transition(EV, (1-(alpha))*kappa, num_ensembles=num_ensembles)      # exposed to infected underreported
+    eV2iVr     = pomp_transition(EV, alpha*(1-iVfr)*kappa, num_ensembles=num_ensembles) # exposed to infected reported who are not going to die
+    eV2iVd     = pomp_transition(EV, alpha*iVfr*kappa, num_ensembles=num_ensembles)           # exposed to infected reported who are going to die
     iVu2rV     = pomp_transition(IVu, gamma, num_ensembles=num_ensembles)               # infected under-reported to recovered
     iVr2rV     = pomp_transition(IVr, gamma, num_ensembles=num_ensembles)               # infected reported (who are not going to die) to recovered
     iVd2deathV = pomp_transition(IVd, gamma_d, num_ensembles=num_ensembles)             # infected reported (who are going to die) to Death

@@ -1,3 +1,7 @@
 *.npz
 .ipynb_checkpoints/
 *.pyc
+*.docx
+*.pptx
+*.pdf
+*.R
